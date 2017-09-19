@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="textvalue">مرحبا بكم في العالم</string>
+    <string name="button">انقر</string>
+    <string name="textvlauenew">لقد نقرت</string>
+</resources>

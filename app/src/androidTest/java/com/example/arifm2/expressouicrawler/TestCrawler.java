@@ -34,9 +34,9 @@ public class TestCrawler {
 
     public static final String LANGUAGES_SET_TAG = "languageSet";
 
+    //not able to loop through setupclass
     @DataPoints(LANGUAGES_SET_TAG)
-    public static final String[] languages = {"ar","zh","keeping this extra, bz i'm not able to " +
-            "set language @before "};
+    public static final String[] languages = {"ar","zh","us"};
 
     static Crawler crawler;
 

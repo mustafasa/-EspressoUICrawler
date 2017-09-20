@@ -123,11 +123,11 @@ public class Crawler {
         Entries subEntries = new Entries();
         subEntries.setName(createImageName());
         subEntries.setFileName(createImageFileName());
-        subEntries.setIdentifiers(getScreenIdentifiers());
+        subEntries.setIdentifiers(getCurrentScreenIdentifiers());
         return subEntries;
     }
 
-    private Map<String, List<CoOrdinates>> getScreenIdentifiers() {
+    private Map<String, List<CoOrdinates>> getCurrentScreenIdentifiers() {
         Map<String, List<CoOrdinates>> identifiers = new HashMap<>();
         LayoutInflater inflater = activity.getLayoutInflater();
         ViewGroup viewgroup = (ViewGroup) inflater.inflate(resource, null, true);
@@ -137,14 +137,14 @@ public class Crawler {
             CoOrdinates coordinates = new CoOrdinates();
             String id = "";
             if (view instanceof Button) {
-                Button buttonView = (Button) view;
+                Button buttonView = activity.findViewById(view.getId());
                 id = Stringids.get(buttonView.getText().toString());
                 coordinates.setWidth(buttonView.getWidth());
                 coordinates.setHeight(buttonView.getHeight());
                 coordinates.setX((int) buttonView.getX());
                 coordinates.setY((int) buttonView.getY());
             } else if (view instanceof TextView) {
-                TextView textView = (TextView) view;
+                TextView textView = activity.findViewById(view.getId());
                 id = Stringids.get(textView.getText().toString());
                 coordinates.setWidth(textView.getWidth());
                 coordinates.setHeight(textView.getHeight());

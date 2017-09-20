@@ -34,7 +34,7 @@ public class TestCrawler {
 
     public static final String LANGUAGES_SET_TAG = "languageSet";
 
-    //not able to loop through setupclass
+    //This is the only issue i have can't loop through datapoint in setupclass
     @DataPoints(LANGUAGES_SET_TAG)
     public static final String[] languages = {"ar","zh","us"};
 

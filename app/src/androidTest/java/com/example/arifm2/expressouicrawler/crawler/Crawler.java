@@ -13,8 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.arifm2.expressouicrawler.BuildConfig;
-import com.example.arifm2.expressouicrawler.R;
+
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -46,20 +45,24 @@ public class Crawler {
     private boolean hasMultipleScreen;
     private Integer sequenceNumber;
     private Map<String, Entries> entries;
+    private Object stringClass;
+    private Field[] fields;
 
-    public Crawler() {
+    public Crawler(Object stringClass, Field[] fields) {
         Stringids = new HashMap<>();
         gson = new Gson();
         entries = new HashMap<>();
+        this.stringClass = stringClass;
+        this.fields = fields;
 
     }
 
-    public void setActivity(Activity activity, int resource,boolean hasMultipleScreen) {
+    public void setActivity(Activity activity, int resource, boolean hasMultipleScreen) {
         this.activity = activity;
         this.resource = resource;
         this.hasMultipleScreen = hasMultipleScreen;
-        screenID=null;
-        sequenceNumber=null;
+        screenID = null;
+        sequenceNumber = null;
     }
 
     public void setLocale(Locale locale) {
@@ -88,7 +91,7 @@ public class Crawler {
         localization = new Localization();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd_hh:mm:ss", Locale.ENGLISH);
         localization.setTimeStamp(sdf.format(new Date()));
-        localization.setVersion(Integer.toString(BuildConfig.VERSION_CODE));
+        localization.setVersion("1");
         localization.setBuild("1");
         localization.setDevice(android.os.Build.MODEL);
         localization.setLocale(activity.getResources().getConfiguration().locale.toString());
@@ -98,16 +101,15 @@ public class Crawler {
 
     private Map<String, Content> getAllIdentifiers() {
         Map<String, Content> identifier = new HashMap<>();
-        Field[] fields = R.string.class.getFields();
         for (final Field field : fields) {
-            String stringid = field.getName();
+            String idInString = field.getName();
             try {
-                int id = field.getInt(R.string.class);
-                String stringValue = activity.getResources().getString(id);
+                int stringId = field.getInt(stringClass);
+                String stringValue = activity.getResources().getString(stringId);
                 Content content = new Content();
                 content.setContent(stringValue);
-                identifier.put(stringid, content);
-                Stringids.put(stringValue, stringid);
+                identifier.put(idInString, content);
+                Stringids.put(stringValue, idInString);
             } catch (Exception ex) {
                 //do smth
             }
@@ -133,7 +135,6 @@ public class Crawler {
         ViewGroup viewgroup = (ViewGroup) inflater.inflate(resource, null, true);
         for (int i = 0; i < viewgroup.getChildCount(); i++) {
             View view = viewgroup.getChildAt(i);
-            List<CoOrdinates> list = new ArrayList<>();
             CoOrdinates coordinates = new CoOrdinates();
             String id = "";
             if (view instanceof Button) {
@@ -145,16 +146,36 @@ public class Crawler {
                 coordinates.setY((int) buttonView.getY());
             } else if (view instanceof TextView) {
                 TextView textView = activity.findViewById(view.getId());
-                id = Stringids.get(textView.getText().toString());
+                id = getIdFromString(textView.getText().toString());
                 coordinates.setWidth(textView.getWidth());
                 coordinates.setHeight(textView.getHeight());
                 coordinates.setX((int) textView.getX());
                 coordinates.setY((int) textView.getY());
             }
-            list.add(coordinates);
-            identifiers.put(id, list);
+            //Adding CoOrdinates in identifier, if CoOrdinates exist add new value
+            // in existing CoOrdinates array
+            if (identifiers.containsKey(id)) {
+                List<CoOrdinates> list = identifiers.get(id);
+                list.add(coordinates);
+                identifiers.put(id, list);
+            } else {
+                List<CoOrdinates> list = new ArrayList<>();
+                list.add(coordinates);
+                identifiers.put(id, list);
+            }
+
         }
         return identifiers;
+    }
+
+    private String getIdFromString(String s) {
+        if (!Stringids.containsKey(s)) {
+            for (String key : Stringids.keySet()) {
+                if (s.matches(getRegexpFromFormatString(key)))
+                    return Stringids.get(key);
+            }
+        }
+        return Stringids.get(s);
     }
 
     private void createLocalizationFile() {
@@ -230,7 +251,7 @@ public class Crawler {
                     .replace("Activity", "")) + ".png";
         }
 
-        return splitCamelCase(activity.getClass().getSimpleName().replace("Activity", "")) +"-"+
+        return splitCamelCase(activity.getClass().getSimpleName().replace("Activity", "")) + "-" +
                 sequenceNumber + ".png";
     }
 
@@ -294,5 +315,22 @@ public class Crawler {
         }
     }
 
+    private String getRegexpFromFormatString(String format) {
+        String result = format;
+        result = result.replaceAll("\\!", "\\\\!");
+
+        if (result.indexOf("%") >= 0) {
+            result = result.replaceAll("%s", "[\\\\w]+").replaceAll("%d", "[\\\\w]+");
+
+            while (result.matches(".*%([0-9]+)[d]{1}.*")) {
+                String digitStr = result.replaceFirst(".*%([0-9]+)[d]{1}.*", "$1");
+                int numDigits = Integer.parseInt(digitStr);
+                result = result.replaceFirst("(.*)(%[0-9]+[d]{1})(.*)", "$1[0-9]{"
+                        + numDigits + "}$3");
+            }
+        }
+
+        return "^" + result + "$";
+    }
 
 }

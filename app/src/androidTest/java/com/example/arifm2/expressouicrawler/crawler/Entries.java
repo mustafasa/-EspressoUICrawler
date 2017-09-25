@@ -15,13 +15,13 @@ public class Entries {
     @Expose
     private String fileName;
     @Expose
-    Map<String, List<CoOrdinates>> identifiers;
+    Map<String, List<Coordinates>> identifiers;
 
-    public Map<String, List<CoOrdinates>> getIdentifiers() {
+    public Map<String, List<Coordinates>> getIdentifiers() {
         return identifiers;
     }
 
-    public void setIdentifiers(Map<String, List<CoOrdinates>> identifiers) {
+    public void setIdentifiers(Map<String, List<Coordinates>> identifiers) {
         this.identifiers = identifiers;
     }
 

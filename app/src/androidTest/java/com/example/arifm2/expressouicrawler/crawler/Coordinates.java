@@ -6,7 +6,7 @@ import com.google.gson.annotations.Expose;
  * Created by arifm2 on 9/15/2017.
  */
 
-public class CoOrdinates {
+public class Coordinates {
     @Expose
     private int x;
     @Expose

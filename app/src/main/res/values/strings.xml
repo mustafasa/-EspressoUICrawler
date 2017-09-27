@@ -4,5 +4,5 @@
     <string name="textvalue">Welcome to world</string>
     <string name="textvlauenew">You clicked</string>
     <string name="button2">Hang</string>
-    <string name="SubStringTest">%d hours</string>
+    <string name="SubStringTest_5">%d hours</string>
 </resources>

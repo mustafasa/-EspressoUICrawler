@@ -4,5 +4,5 @@
     <string name="button">点击</string>
     <string name="textvlauenew">你點擊了</string>
     <string name="button2">挂</string>
-    <string name="SubStringTest">%d 小时</string>
+    <string name="SubStringTest_5">%d 小时</string>
 </resources>

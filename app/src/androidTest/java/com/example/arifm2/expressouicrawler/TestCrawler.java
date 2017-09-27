@@ -28,10 +28,6 @@ public class TestCrawler {
     public ActivityTestRule<MainActivity> intentsTestRule = new ActivityTestRule<>(
             MainActivity.class);
 
-    @Rule
-    public ActivityTestRule<SecondActivity> intentsTestRule2 = new ActivityTestRule<>(
-            SecondActivity.class);
-
     public static final String LANGUAGES_SET_TAG = "languageSet";
 
     //This is the only issue i have can't loop through datapoint in setupclass
@@ -42,8 +38,7 @@ public class TestCrawler {
 
     @BeforeClass
     public static void setUpclass() throws Exception {
-        crawler = new Crawler(R.string.class);
-        crawler.setLocale(new Locale("ar"));
+        crawler = new Crawler(R.string.class,new Locale("ar"));
     }
 
 
@@ -56,12 +51,6 @@ public class TestCrawler {
         crawler.capture();
     }
 
-    @Test
-    public void test_Main2Activity()
-            throws Throwable {
-        crawler.setActivity(intentsTestRule2.getActivity(), false);
-        crawler.capture();
-    }
 
     @AfterClass
     public static void tearDown() {

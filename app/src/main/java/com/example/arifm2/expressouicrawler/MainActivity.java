@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void kk(View view){
         TextView tv= (TextView)findViewById(R.id.textview);
-        tv.setText(getResources().getString(R.string.SubStringTest,5));
+        tv.setText(getResources().getString(R.string.SubStringTest_5,5));
 
     }
 

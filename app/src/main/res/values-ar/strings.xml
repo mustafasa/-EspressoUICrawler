@@ -4,5 +4,5 @@
     <string name="button">انقر</string>
     <string name="textvlauenew">لقد نقرت</string>
     <string name="button2">علق</string>
-    <string name="SubStringTest">%d ساعة</string>
+    <string name="SubStringTest_5">%d ساعة</string>
 </resources>
